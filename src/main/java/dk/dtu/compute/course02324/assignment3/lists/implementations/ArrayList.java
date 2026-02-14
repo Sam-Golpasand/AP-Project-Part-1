@@ -59,9 +59,7 @@ public class ArrayList<E> implements List<E> {
 			throw new IndexOutOfBoundsException();
 		}
 
-		if (e == null) {
-			throw new IllegalArgumentException();
-		}
+		validateNotNull(e);
 
 		E originalValue = list[pos];
 
@@ -72,14 +70,9 @@ public class ArrayList<E> implements List<E> {
 
 	@Override
 	public boolean add(@NotNull E e) {
-		// Check if we need to make the array longer.
-		if (size == list.length) {
-			extendList();
-		}
 
-		if (e == null) {
-			throw new IllegalArgumentException();
-		}
+		ensureCapacity();
+		validateNotNull(e);
 
 		list[size] = e;
 
@@ -95,13 +88,8 @@ public class ArrayList<E> implements List<E> {
 
 		}
 
-		if (e == null) {
-			throw new IllegalArgumentException();
-		}
-
-		if (size == list.length) {
-			extendList();
-		}
+		ensureCapacity();
+		validateNotNull(e);
 
 		// Start from the end of the array and shift all the values up one.
 		for (int i = size; i > pos; i--) {
@@ -187,5 +175,17 @@ public class ArrayList<E> implements List<E> {
 			newArray[i] = list[i];
 		}
 		list = newArray;
+	}
+
+	private void validateNotNull(E e) {
+		if (e == null) {
+			throw new IllegalArgumentException();
+		}
+	}
+
+	private void ensureCapacity() {
+		if (size == list.length) {
+			extendList();
+		}
 	}
 }

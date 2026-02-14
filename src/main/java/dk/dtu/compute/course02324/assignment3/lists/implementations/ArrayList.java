@@ -117,6 +117,7 @@ public class ArrayList<E> implements List<E> {
 			throw new IndexOutOfBoundsException();
 		}
 
+		// store the value to be returned later
 		E overwrittenValue = list[pos];
 
 		for (int i = pos; i < size - 1; i++) {
@@ -131,18 +132,16 @@ public class ArrayList<E> implements List<E> {
 	@Override
 	public boolean remove(E e) {
 
+		// Use the indexOf function to find the index and then use the previous remove
+		// function
+
 		int pos = indexOf(e);
 
 		if (pos == -1) {
 			return false;
 		}
 
-		for (int i = pos; i < size - 1; i++) {
-			list[i] = list[i + 1];
-		}
-
-		size--;
-		list[size] = null;
+		remove(pos);
 		return true;
 	}
 
@@ -176,9 +175,7 @@ public class ArrayList<E> implements List<E> {
 		return (E[]) new Object[length];
 	}
 
-	// TODO probably some private helper methods here (avoiding duplicated code)
-	// (Assignment 3a)
-
+	// Extends the list with 10.
 	private void extendList() {
 
 		E[] newArray = createEmptyArray(list.length + DEFAULT_SIZE);

@@ -43,21 +43,14 @@ public class ArrayList<E> implements List<E> {
 
 	@Override
 	public @NotNull E get(int pos) throws IndexOutOfBoundsException {
-		if (pos < 0 || pos >= size) {
-			throw new IndexOutOfBoundsException();
-
-		}
-
+		checkIndex(pos);
 		return list[pos];
 
 	}
 
 	@Override
 	public E set(int pos, @NotNull E e) throws IndexOutOfBoundsException {
-
-		if (pos < 0 || pos >= size) {
-			throw new IndexOutOfBoundsException();
-		}
+		checkIndex(pos);
 
 		validateNotNull(e);
 
@@ -103,10 +96,8 @@ public class ArrayList<E> implements List<E> {
 
 	@Override
 	public E remove(int pos) throws IndexOutOfBoundsException {
-		if (pos < 0 || pos >= size) {
-			throw new IndexOutOfBoundsException();
-		}
-
+		checkIndex(pos);
+		//
 		// store the value to be returned later
 		E overwrittenValue = list[pos];
 
@@ -180,6 +171,12 @@ public class ArrayList<E> implements List<E> {
 	private void validateNotNull(E e) {
 		if (e == null) {
 			throw new IllegalArgumentException();
+		}
+	}
+
+	private void checkIndex(int pos) {
+		if (pos < 0 || pos >= size) {
+			throw new IndexOutOfBoundsException();
 		}
 	}
 

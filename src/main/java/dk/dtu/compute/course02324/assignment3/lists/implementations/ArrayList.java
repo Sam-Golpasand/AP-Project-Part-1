@@ -72,6 +72,7 @@ public class ArrayList<E> implements List<E> {
 
 	@Override
 	public boolean add(@NotNull E e) {
+		// Check if we need to make the array longer.
 		if (size == list.length) {
 			extendList();
 		}
@@ -102,6 +103,7 @@ public class ArrayList<E> implements List<E> {
 			extendList();
 		}
 
+		// Start from the end of the array and shift all the values up one.
 		for (int i = size; i > pos; i--) {
 			list[i] = list[i - 1];
 		}
@@ -134,7 +136,6 @@ public class ArrayList<E> implements List<E> {
 
 		// Use the indexOf function to find the index and then use the previous remove
 		// function
-
 		int pos = indexOf(e);
 
 		if (pos == -1) {
@@ -175,7 +176,9 @@ public class ArrayList<E> implements List<E> {
 		return (E[]) new Object[length];
 	}
 
-	// Extends the list with 10.
+	// Extends the list with the default size of the array. NOTE for optimization we
+	// can also make the list length list.length * 2. This might be better but idk
+	// lol
 	private void extendList() {
 
 		E[] newArray = createEmptyArray(list.length + DEFAULT_SIZE);

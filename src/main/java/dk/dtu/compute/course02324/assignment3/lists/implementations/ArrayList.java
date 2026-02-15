@@ -155,19 +155,6 @@ public class ArrayList<E> implements List<E> {
 		return (E[]) new Object[length];
 	}
 
-	// Extends the list with the default size of the array. NOTE for optimization we
-	// can also make the list length list.length * 2. This might be better but idk
-	// lol
-	private void extendList() {
-
-		E[] newArray = createEmptyArray(list.length + DEFAULT_SIZE);
-
-		for (int i = 0; i < size; i++) {
-			newArray[i] = list[i];
-		}
-		list = newArray;
-	}
-
 	private void validateNotNull(E e) {
 		if (e == null) {
 			throw new IllegalArgumentException();
@@ -180,9 +167,17 @@ public class ArrayList<E> implements List<E> {
 		}
 	}
 
+	// Extends the list with the default size of the array. NOTE for optimization we
+	// can also make the list length list.length * 2. This might be better but idk
+	// lol
 	private void ensureCapacity() {
 		if (size == list.length) {
-			extendList();
+			E[] newArray = createEmptyArray(list.length + DEFAULT_SIZE);
+
+			for (int i = 0; i < size; i++) {
+				newArray[i] = list[i];
+			}
+			list = newArray;
 		}
 	}
 }

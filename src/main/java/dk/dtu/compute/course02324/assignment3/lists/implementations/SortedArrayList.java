@@ -49,9 +49,4 @@ public class SortedArrayList<E extends Comparable<E>> extends ArrayList<E> imple
         return size();
     }
 
-    private void validateNotNull(E e) {
-        if (e == null) {
-            throw new IllegalArgumentException();
-        }
-    }
 }

@@ -162,7 +162,8 @@ public class ArrayList<E> implements List<E> {
 		return (E[]) new Object[length];
 	}
 
-	private void validateNotNull(E e) {
+	// We don't make this private since we use it in sorted array.
+	void validateNotNull(E e) {
 		if (e == null) {
 			throw new IllegalArgumentException();
 		}

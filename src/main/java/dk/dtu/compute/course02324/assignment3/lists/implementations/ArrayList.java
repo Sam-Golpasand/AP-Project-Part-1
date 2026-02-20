@@ -64,8 +64,10 @@ public class ArrayList<E> implements List<E> {
 	@Override
 	public boolean add(@NotNull E e) {
 
-		ensureCapacity();
 		validateNotNull(e);
+
+		ensureCapacity();
+
 
 		list[size] = e;
 
@@ -127,6 +129,8 @@ public class ArrayList<E> implements List<E> {
 
 	@Override
 	public int indexOf(E e) {
+		validateNotNull(e);
+
 		for (int i = 0; i < size; i++) {
 			if (list[i].equals(e)) {
 				return i;
@@ -141,7 +145,6 @@ public class ArrayList<E> implements List<E> {
 		if (this instanceof SortedArrayList) {
 			throw new UnsupportedOperationException("Cannot sort since it is already sorted");
 		}
-		
 		BubbleSort.sort(c, this);
 	}
 

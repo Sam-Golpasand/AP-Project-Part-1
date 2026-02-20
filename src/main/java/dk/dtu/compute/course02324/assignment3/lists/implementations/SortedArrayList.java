@@ -17,6 +17,9 @@ public class SortedArrayList<E extends Comparable<E>> extends ArrayList<E> imple
 
     @Override
     public boolean add(@NotNull E e) {
+
+        validateNotNull(e);
+
         int index = findIndexToInsert(e);
         super.add(index, e);
 
@@ -34,6 +37,9 @@ public class SortedArrayList<E extends Comparable<E>> extends ArrayList<E> imple
      * @return the position at which the element should be inserted
      */
     private int findIndexToInsert(@NotNull E e) {
+
+        validateNotNull(e);
+
         for (int i = 0; i < size(); i++) {
             if (e.compareTo(get(i)) <= 0) {
                 return i;
@@ -43,4 +49,9 @@ public class SortedArrayList<E extends Comparable<E>> extends ArrayList<E> imple
         return size();
     }
 
+    private void validateNotNull(E e) {
+        if (e == null) {
+            throw new IllegalArgumentException();
+        }
+    }
 }

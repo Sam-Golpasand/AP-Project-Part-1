@@ -30,8 +30,8 @@ public class PersonsGUI extends GridPane {
     final private List<Person> persons;
 
     private GridPane personsPane;
-
-    private int weightCount = 1;
+    private Label averageWeightLabel;
+    private Label commonNameLabel;
 
     /**
      * Constructor which sets up the GUI attached a list of persons.
@@ -50,6 +50,10 @@ public class PersonsGUI extends GridPane {
         field.setPrefColumnCount(5);
         field.setText("name");
 
+        TextField weightField = new TextField();
+        weightField.setPrefColumnCount(5);
+        weightField.setText("weight");
+
         // TODO for all buttons installed below, the actions need to properly
         //      handle (catch) exceptions, and it would be nice if the GUI
         //      could also show the exceptions thrown by user actions on
@@ -61,7 +65,7 @@ public class PersonsGUI extends GridPane {
         Button addButton = new Button("Add");
         addButton.setOnAction(
                 e -> {
-                    Person person = new Person(field.getText(), weightCount++);
+                    Person person = new Person(field.getText(), Double.parseDouble(weightField.getText()));
                     persons.add(person);
                     // makes sure that the GUI is updated accordingly
                     update();
@@ -89,9 +93,27 @@ public class PersonsGUI extends GridPane {
                     update();
                 });
 
+        TextField indexField = new TextField();
+        indexField.setPrefColumnCount(5);
+        indexField.setText("index");
+
+        Button addToIndexButton = new Button("Add to index");
+        addToIndexButton.setOnAction(
+                e -> {
+
+                    Person person = new Person(field.getText(), Double.parseDouble(weightField.getText()));
+                    persons.add(Integer.parseInt(indexField.getText()), person);
+                    // makes sure that the GUI is updated accordingly
+                    update();
+                });
+
+
+        averageWeightLabel = new Label("Average Weight: ");
+        commonNameLabel = new Label("Most Common Name: ");
+
         // combines the above elements into vertically arranged boxes
         // which are then added to the left column of the grid pane
-        VBox actionBox = new VBox(field, addButton, sortButton, clearButton);
+        VBox actionBox = new VBox(field, weightField, addButton, sortButton, clearButton, indexField, addToIndexButton, averageWeightLabel, commonNameLabel);
         actionBox.setSpacing(5.0);
         this.add(actionBox, 0, 0);
 
@@ -129,10 +151,12 @@ public class PersonsGUI extends GridPane {
      */
     private void update() {
         personsPane.getChildren().clear();
+        double totalWeight = 0;
         // adds all persons to the list in the personsPane (with
         // a delete button in front of it)
         for (int i=0; i < persons.size(); i++) {
             Person person = persons.get(i);
+            totalWeight += person.weight;
             Label personLabel = new Label(i + ": " + person.toString());
             Button deleteButton = new Button("Delete");
             deleteButton.setOnAction(
@@ -141,6 +165,15 @@ public class PersonsGUI extends GridPane {
                         update();
                     }
             );
+
+            if (!persons.isEmpty()) {
+                double average = totalWeight / persons.size();
+                averageWeightLabel.setText("Average Weight: " + average);
+            } else {
+                averageWeightLabel.setText("Average Weight: ");
+            }
+
+
             HBox entry = new HBox(deleteButton, personLabel);
             entry.setSpacing(5.0);
             entry.setAlignment(Pos.BASELINE_LEFT);

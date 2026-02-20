@@ -21,6 +21,7 @@ public class Person implements Comparable<Person> {
 
     @Override
     public int compareTo(@NotNull Person o) {
+        // This code has been taken from the slides for assignment 3b
         if (o == null) {
             throw new IllegalArgumentException("Argument of compareTo() must not be null");
         }
@@ -60,6 +61,7 @@ public class Person implements Comparable<Person> {
      */
     @Override
     public boolean equals(Object o) {
+        // This code has been taken from the slides for assignment 3b
         if (this == o) {
             return true;
         }
@@ -74,6 +76,7 @@ public class Person implements Comparable<Person> {
 
     @Override
     public int hashCode() {
+        // This code has been taken from the slides for assignment 3b
         return Objects.hash(name, weight);
     }
 

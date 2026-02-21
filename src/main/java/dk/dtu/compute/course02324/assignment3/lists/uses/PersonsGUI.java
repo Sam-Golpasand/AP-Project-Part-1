@@ -14,7 +14,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import jakarta.validation.constraints.NotNull;
-import java.util.Comparator;
+
+import java.util.*;
 
 /**
  * A GUI element that is allows the user to interact and
@@ -30,8 +31,10 @@ public class PersonsGUI extends GridPane {
     final private List<Person> persons;
 
     private GridPane personsPane;
+    private GridPane exceptionsPane;
     private Label averageWeightLabel;
     private Label commonNameLabel;
+    private ArrayList<Exception> exceptions = new ArrayList<>();
 
     /**
      * Constructor which sets up the GUI attached a list of persons.
@@ -65,10 +68,15 @@ public class PersonsGUI extends GridPane {
         Button addButton = new Button("Add");
         addButton.setOnAction(
                 e -> {
-                    Person person = new Person(field.getText(), Double.parseDouble(weightField.getText()));
-                    persons.add(person);
-                    // makes sure that the GUI is updated accordingly
-                    update();
+                    try {
+                        Person person = new Person(field.getText(), Double.parseDouble(weightField.getText()));
+                        persons.add(person);
+                        // makes sure that the GUI is updated accordingly
+                    } catch (Exception error) {
+                        exceptions.add(error);
+                    } finally {
+                        update();
+                    }
                 });
 
         Comparator<Person> comparator = new GenericComparator<>();
@@ -79,9 +87,13 @@ public class PersonsGUI extends GridPane {
         Button sortButton = new Button("Sort");
         sortButton.setOnAction(
                 e -> {
-                    persons.sort(comparator);
-                    // makes sure that the GUI is updated accordingly
-                    update();
+                    try {
+                        persons.sort(comparator);
+                    } catch (Exception error) {
+                        exceptions.add(error);
+                    } finally {
+                        update();
+                    }
                 });
 
         // button for clearing the list
@@ -100,11 +112,16 @@ public class PersonsGUI extends GridPane {
         Button addToIndexButton = new Button("Add to index");
         addToIndexButton.setOnAction(
                 e -> {
+                    try {
 
-                    Person person = new Person(field.getText(), Double.parseDouble(weightField.getText()));
-                    persons.add(Integer.parseInt(indexField.getText()), person);
-                    // makes sure that the GUI is updated accordingly
-                    update();
+                        Person person = new Person(field.getText(), Double.parseDouble(weightField.getText()));
+                        persons.add(Integer.parseInt(indexField.getText()), person);
+                        // makes sure that the GUI is updated accordingly
+                    } catch (Exception error) {
+                        exceptions.add(error);
+                    } finally {
+                        update();
+                    }
                 });
 
 
@@ -140,6 +157,25 @@ public class PersonsGUI extends GridPane {
         personsList.setSpacing(5.0);
         this.add(personsList, 1, 0);
 
+
+        Label labelExceptions = new Label("Exceptions:");
+        exceptionsPane = new GridPane();
+        exceptionsPane.setPadding(new Insets(5));
+        exceptionsPane.setHgap(5);
+        exceptionsPane.setVgap(5);
+
+        ScrollPane exceptionsScroll = new ScrollPane(exceptionsPane);
+        exceptionsScroll.setMinWidth(300);
+        exceptionsScroll.setMaxWidth(300);
+        exceptionsScroll.setMinHeight(150);
+        exceptionsScroll.setMaxHeight(150);
+        exceptionsScroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        exceptionsScroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+
+        VBox exceptionsBox = new VBox(labelExceptions, exceptionsScroll);
+        exceptionsBox.setSpacing(5.0);
+        this.add(exceptionsBox, 1, 1); // under persons list
+
         // updates the values of the different components with the values from
         // the stack
         update();
@@ -152,26 +188,36 @@ public class PersonsGUI extends GridPane {
     private void update() {
         personsPane.getChildren().clear();
         double totalWeight = 0;
+
+        Map<String, Integer> nameCount = new HashMap<>();
         // adds all persons to the list in the personsPane (with
         // a delete button in front of it)
         for (int i=0; i < persons.size(); i++) {
             Person person = persons.get(i);
             totalWeight += person.weight;
+
+            // Increment or insert name if is already in list of nameCount
+            if (nameCount.get(person.name) == null) {
+                nameCount.put(person.name, 1);
+            } else {
+                int newCount = nameCount.get(person.name) + 1;
+                nameCount.put(person.name, newCount);
+            }
+
             Label personLabel = new Label(i + ": " + person.toString());
             Button deleteButton = new Button("Delete");
             deleteButton.setOnAction(
                     e -> {
-                        persons.remove(person);
-                        update();
+                        try {
+                            persons.remove(person);
+                        } catch (Exception error) {
+                            exceptions.add(error);
+                        } finally {
+                            update();
+                        }
                     }
             );
 
-            if (!persons.isEmpty()) {
-                double average = totalWeight / persons.size();
-                averageWeightLabel.setText("Average Weight: " + average);
-            } else {
-                averageWeightLabel.setText("Average Weight: ");
-            }
 
 
             HBox entry = new HBox(deleteButton, personLabel);
@@ -179,6 +225,38 @@ public class PersonsGUI extends GridPane {
             entry.setAlignment(Pos.BASELINE_LEFT);
             personsPane.add(entry, 0, i);
         }
+
+        if (!persons.isEmpty()) {
+            double average = totalWeight / persons.size();
+            averageWeightLabel.setText("Average Weight: " + average);
+        } else {
+            averageWeightLabel.setText("Average Weight: ");
+        }
+
+        // Get the name of the most occuring person in the list
+        String name = "";
+        int currentMaxCount = 0;
+
+        Set<Map.Entry<String, Integer>> nameCountSet = nameCount.entrySet();
+
+        for (Map.Entry<String, Integer> entry : nameCountSet) {
+            if (entry.getValue() > currentMaxCount) {
+                name = entry.getKey();
+                currentMaxCount = entry.getValue();
+            }
+        }
+
+        if (!name.isEmpty()) {
+            commonNameLabel.setText("Most Common Name: " + name);
+        }
+
+        exceptionsPane.getChildren().clear();
+        for (int i = 0; i < exceptions.size(); i++) {
+            Exception ex = exceptions.get(i);
+            Label exLabel = new Label(ex.getClass() + " " +  ex.getMessage());
+            exceptionsPane.add(exLabel, 0, i);
+        }
+
     }
 
     // TODO this GUI could be extended by some additional widgets for issuing other

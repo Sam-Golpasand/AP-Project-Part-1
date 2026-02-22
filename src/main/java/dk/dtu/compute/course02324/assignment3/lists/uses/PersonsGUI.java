@@ -57,14 +57,9 @@ public class PersonsGUI extends GridPane {
         weightField.setPrefColumnCount(5);
         weightField.setText("weight");
 
-        // TODO for all buttons installed below, the actions need to properly
-        //      handle (catch) exceptions, and it would be nice if the GUI
-        //      could also show the exceptions thrown by user actions on
-        //      button pressed (cf. Assignment 2).
 
         // button for adding a new person to the list (based on
         // the name in the text field (the weight is just incrementing)
-        // TODO a text field for the weight could be added to this GUI
         Button addButton = new Button("Add");
         addButton.setOnAction(
                 e -> {
@@ -78,6 +73,9 @@ public class PersonsGUI extends GridPane {
                         update();
                     }
                 });
+
+        averageWeightLabel = new Label("Average Weight: ");
+        commonNameLabel = new Label("Most Common Name: ");
 
         Comparator<Person> comparator = new GenericComparator<>();
 
@@ -101,6 +99,7 @@ public class PersonsGUI extends GridPane {
         clearButton.setOnAction(
                 e -> {
                     persons.clear();
+                    commonNameLabel.setText("Most Common Name: ");
                     // makes sure that the GUI is updated accordingly
                     update();
                 });
@@ -109,8 +108,8 @@ public class PersonsGUI extends GridPane {
         indexField.setPrefColumnCount(5);
         indexField.setText("index");
 
-        Button addToIndexButton = new Button("Add to index");
-        addToIndexButton.setOnAction(
+        Button addAtIndex = new Button("Add at index");
+         addAtIndex.setOnAction(
                 e -> {
                     try {
 
@@ -124,13 +123,13 @@ public class PersonsGUI extends GridPane {
                     }
                 });
 
+        VBox indexLabelButton = new VBox(indexField, addAtIndex);
+        addAtIndex.setPrefWidth(80);
 
-        averageWeightLabel = new Label("Average Weight: ");
-        commonNameLabel = new Label("Most Common Name: ");
 
         // combines the above elements into vertically arranged boxes
         // which are then added to the left column of the grid pane
-        VBox actionBox = new VBox(field, weightField, addButton, sortButton, clearButton, indexField, addToIndexButton, averageWeightLabel, commonNameLabel);
+        VBox actionBox = new VBox(field, weightField, addButton, sortButton, clearButton, indexLabelButton, averageWeightLabel, commonNameLabel);
         actionBox.setSpacing(5.0);
         this.add(actionBox, 0, 0);
 
@@ -237,6 +236,7 @@ public class PersonsGUI extends GridPane {
         String name = "";
         int currentMaxCount = 0;
 
+        // We use a Map to keep track of which names (keys) have occurred and keep a count (value) of how many times that name has occurred.
         Set<Map.Entry<String, Integer>> nameCountSet = nameCount.entrySet();
 
         for (Map.Entry<String, Integer> entry : nameCountSet) {
@@ -250,6 +250,7 @@ public class PersonsGUI extends GridPane {
             commonNameLabel.setText("Most Common Name: " + name);
         }
 
+        // We first clear the pane such that we don't show the same exception twice and then we reiterate over the list of exceptions to show the current relevant ones.
         exceptionsPane.getChildren().clear();
         for (int i = 0; i < exceptions.size(); i++) {
             Exception ex = exceptions.get(i);
@@ -259,9 +260,5 @@ public class PersonsGUI extends GridPane {
 
     }
 
-    // TODO this GUI could be extended by some additional widgets for issuing other
-    //      operations of lists. And the possibly thrown exceptions should be caught
-    //      in the event handler (and possibly shown in an additional text area for
-    //      exceptions; see Assignment 2).
 
 }

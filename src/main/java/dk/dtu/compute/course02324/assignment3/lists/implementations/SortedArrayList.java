@@ -21,6 +21,7 @@ public class SortedArrayList<E extends Comparable<E>> extends ArrayList<E> imple
         validateNotNull(e);
 
         int index = findIndexToInsert(e);
+        // reuse the same add function as the parent class.
         super.add(index, e);
 
         return true;

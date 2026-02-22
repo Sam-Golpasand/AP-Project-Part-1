@@ -51,11 +51,9 @@ public class ArrayList<E> implements List<E> {
 	@Override
 	public E set(int pos, @NotNull E e) throws IndexOutOfBoundsException {
 		checkIndex(pos);
-
 		validateNotNull(e);
 
 		E originalValue = list[pos];
-
 		list[pos] = e;
 
 		return originalValue;
@@ -65,12 +63,9 @@ public class ArrayList<E> implements List<E> {
 	public boolean add(@NotNull E e) {
 
 		validateNotNull(e);
-
 		ensureCapacity();
 
-
 		list[size] = e;
-
 		size++;
 		return true;
 
@@ -99,7 +94,7 @@ public class ArrayList<E> implements List<E> {
 	@Override
 	public E remove(int pos) throws IndexOutOfBoundsException {
 		checkIndex(pos);
-		//
+
 		// store the value to be returned later
 		E overwrittenValue = list[pos];
 
@@ -115,7 +110,7 @@ public class ArrayList<E> implements List<E> {
 	@Override
 	public boolean remove(E e) {
 
-		// Use the indexOf function to find the index and then use the previous remove
+		// Use the indexOf function to find the index, and then use the previous remove
 		// function
 		int pos = indexOf(e);
 

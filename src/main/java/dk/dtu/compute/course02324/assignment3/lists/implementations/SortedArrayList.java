@@ -4,7 +4,6 @@ import dk.dtu.compute.course02324.assignment3.lists.types.List;
 import dk.dtu.compute.course02324.assignment3.lists.types.SortedList;
 
 import jakarta.validation.constraints.NotNull;
-import java.util.Comparator;
 
 /**
  * An implementation of the interface {@link SortedList} based on the
@@ -25,6 +24,16 @@ public class SortedArrayList<E extends Comparable<E>> extends ArrayList<E> imple
         super.add(index, e);
 
         return true;
+    }
+
+    @Override
+    public boolean add(int pos, @NotNull E e) throws UnsupportedOperationException {
+        throw new UnsupportedOperationException("Operation add(int pos, E e) not allowed on SortedLists");
+    }
+
+    @Override
+    public E set(int pos, @NotNull E e) throws UnsupportedOperationException {
+        throw new UnsupportedOperationException("Operation set(int pos, E e) not allowed on SortedLists");
     }
 
     /**

@@ -99,7 +99,7 @@ public class PersonsGUI extends GridPane {
         clearButton.setOnAction(
                 e -> {
                     persons.clear();
-                    commonNameLabel.setText("Most Common Name: ");
+                    commonNameLabel.setText("Most Common Name: \n");
                     // makes sure that the GUI is updated accordingly
                     update();
                 });
@@ -123,13 +123,14 @@ public class PersonsGUI extends GridPane {
                     }
                 });
 
-        VBox indexLabelButton = new VBox(indexField, addAtIndex);
-        addAtIndex.setPrefWidth(80);
 
 
         // combines the above elements into vertically arranged boxes
         // which are then added to the left column of the grid pane
-        VBox actionBox = new VBox(field, weightField, addButton, sortButton, clearButton, indexLabelButton, averageWeightLabel, commonNameLabel);
+    HBox actionButtons = new HBox(addButton, sortButton, clearButton);
+    actionButtons.setSpacing(5.0);
+
+    VBox actionBox = new VBox(field, weightField, actionButtons, indexField, addAtIndex, averageWeightLabel, commonNameLabel);
         actionBox.setSpacing(5.0);
         this.add(actionBox, 0, 0);
 
@@ -227,7 +228,8 @@ public class PersonsGUI extends GridPane {
 
         if (!persons.isEmpty()) {
             double average = totalWeight / persons.size();
-            averageWeightLabel.setText("Average Weight: " + average);
+            // We round the weight so we dont get a long integer in the UI
+            averageWeightLabel.setText("Average Weight: \n" + Math.round(average * 100) / 100.0);
         } else {
             averageWeightLabel.setText("Average Weight: ");
         }
@@ -247,7 +249,7 @@ public class PersonsGUI extends GridPane {
         }
 
         if (!name.isEmpty()) {
-            commonNameLabel.setText("Most Common Name: " + name);
+            commonNameLabel.setText("Most Common Name: \n" + name);
         }
 
         // We first clear the pane such that we don't show the same exception twice and then we reiterate over the list of exceptions to show the current relevant ones.

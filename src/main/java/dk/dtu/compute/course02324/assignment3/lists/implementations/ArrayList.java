@@ -74,7 +74,7 @@ public class ArrayList<E> implements List<E> {
 	@Override
 	public boolean add(int pos, @NotNull E e) throws IndexOutOfBoundsException {
 		if (pos < 0 || pos > size) {
-			throw new IndexOutOfBoundsException();
+			throw new IndexOutOfBoundsException("Position index is out of bounds");
 
 		}
 
@@ -160,13 +160,13 @@ public class ArrayList<E> implements List<E> {
 	// We don't make this private since we use it in sorted array.
 	void validateNotNull(E e) {
 		if (e == null) {
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("Element must not be null");
 		}
 	}
 
 	private void checkIndex(int pos) {
 		if (pos < 0 || pos >= size) {
-			throw new IndexOutOfBoundsException();
+			throw new IndexOutOfBoundsException("Position index is out of bounds");
 		}
 	}
 

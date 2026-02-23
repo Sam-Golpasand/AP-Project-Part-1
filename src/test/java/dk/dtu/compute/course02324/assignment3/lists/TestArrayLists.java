@@ -70,7 +70,15 @@ public class TestArrayLists extends TestForAllLists{
                 list.size());
     }
 
-    // TODO: there could be some more tests concerning the methods
-    //       clear(), isEmpty(), set(i, E) and add(i, E)
+    @Test
+    public void extraArrayListTests() {
+        list.add("A");
+        list.add("C");
+        Assert.assertTrue(list.add(1, "B"));
+        Assert.assertEquals("A", list.set(0, "AA"));
+        Assert.assertFalse(list.isEmpty());
+        list.clear();
+        Assert.assertTrue(list.isEmpty());
+    }
 
 }

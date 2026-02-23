@@ -67,9 +67,16 @@ public class TestSortedArrayLists extends TestForAllLists{
                 TEST_SIZE/2,
                 list.size());
     }
-
-    // TODO: there could be some more tests concerning the methods
-    //       clear(), isEmpty(), set(i, E) and add(i, E), some of which
-    //       should throw an UnsupportedOperationException!
+    
+    @Test
+    public void extraSortedArrayListTests() {
+        list.add("B");
+        list.add("A");
+        Assert.assertThrows(UnsupportedOperationException.class, () -> { list.add(0, "C"); });
+        Assert.assertThrows(UnsupportedOperationException.class, () -> { list.set(0, "C"); });
+        Assert.assertFalse(list.isEmpty());
+        list.clear();
+        Assert.assertTrue(list.isEmpty());
+    }
 
 }
